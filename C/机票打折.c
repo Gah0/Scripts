@@ -6,19 +6,20 @@
 
 int main()
 {
-	int price,final_price,new_price,new_rate;
-	float rate;
+	int price,new_price,new_rate;
+	float rate,final_price,dec_price;
 	printf("请输入原价和打折率（打折率用小数）");
 	scanf("%d %f",&price,&rate);
 
-	final_price = (int)(price * rate / 10)/10; //62.1
+	final_price = price * rate / 100; //62.16
 
-	if(final_price-(int)final_price>=0.5){
-		final_price +=1;
-		new_price = final_price * 10;
+	if(final_price-(int)final_price>=0.50){
+		final_price += 1;
+		dec_price = final_price-(int)final_price;
+		new_price = (int)final_price * 10;
 	}
 	else{		
-		new_price = (int)(final_price * 10);
+		new_price = (int)final_price * 10;
 	}
 	printf("最终价格为：%d",new_price);
 }
