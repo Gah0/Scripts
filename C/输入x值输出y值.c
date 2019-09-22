@@ -13,7 +13,7 @@ int main(void)
 		goto Label;
 	}
 
-	if(x=0)
+	if(x==0)
 	{
 		int y=5;
 		goto Label;
