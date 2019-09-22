@@ -1,3 +1,4 @@
+/*1.输入 2 个整数,求两数的平方和并输出。*/
 #include "stdio.h"
 #include "math.h"
 
