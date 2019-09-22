@@ -8,7 +8,6 @@ int main()
     for(i=0;i<4;i++)
     {
      scanf("%d",&num[i]);
-     break;
     }
     min = num[0];
 	for(i=1;i<4;i++)
