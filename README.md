@@ -22,8 +22,8 @@ hard 重置索引和工作区（丢弃所有本地变更）
 当使用 git reset --hard B 时，C 添加跟踪的文件，以及当前工作目录中的修改内容，都会丢失。
 
 
-======
+------
 暂存区还有一大堆
 error: Untracked working tree file 'AndroidKernel.mk' would be overwritten by merge.
 fatal: 不能重置索引文件至版本 'HEAD'。
-======
+------
