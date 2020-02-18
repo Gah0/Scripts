@@ -63,3 +63,9 @@ for i in range(231):
     out_list.append(list2[n_start + i])
 print(out_list)
 
+if __name__ == '__main__':
+    read_excle()
+    read_sheet()
+    read_values()
+    coli()
+    range()
