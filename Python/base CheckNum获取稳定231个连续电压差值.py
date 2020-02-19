@@ -58,6 +58,8 @@ def range():
 
 # 结果数组
 out_list = []
+# 检查字符串是否由数字构成
+print(out_list.isdigit())
 
 for i in range(231):
     out_list.append(list2[n_start + i])
