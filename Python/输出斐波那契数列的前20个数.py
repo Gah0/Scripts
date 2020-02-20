@@ -1,23 +1,14 @@
-"""
-输出斐波那契数列的前20个数
-1 1 2 3 5 8 13 21 ...
-"""
-number = []
-count=0
+#斐波拉切数列的生成器
 
-while count < 20:
-    for i in range(count):
-        if count == 0:
-            num = 1
-        else:
-            num = num + num-1
-            count += 1
-            number.append(num)
-            print(number)
+def fib(n):
+    a,b=0,1
+    for _ in range(n):
+        a,b = b,a+b
+        yield a
 
-#另一种写法
-a = 0
-b = 1
-for _ in range(20):
-    a, b = b, a + b
-    print(a, end=' ')
+def main():
+    for val in fib(20):
+        print(val)
+
+if __name__ == '__main__':
+    main()
