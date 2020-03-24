@@ -1,85 +1,93 @@
-#include "stdio.h"
-#include <iostream.h>
-using namespace std;
+#include <stdio.h>
+#include <ctype>
 
-#define Maxsize 10
+#define Maxsize 10;
 
-Typedef int ElemType;
 
-typedef struct{
-    ElemType *elem;
-    int length; //表的长度。
-}SqList;
+typedef struct sqlist{
+    int *elem;
+    int length;
+};
 
-ElemType init_list(SqList &L)
-{
-    L.elem = new ElemType [Maxsize];
-    if(!L.elem)
-        printf("Overflow on elem");
-        return 0;
-    L.length = 0;
-    return 1;
-}
 
-ElemType list_create(SqList &L)
-{
-    int x,i=0;
-    while(x>Maxsize)
-    {
-        if(L.length == Maxsize)
-        {
-            cout<<"顺序表满了"
-            return 0;
-        }
-    cin>>x;
-    L.elem[i++];
-    L.length++;
+void main (){
+    int ret,input;
+    struct sqlist sql;
+    printf("请输入一个数字：");
+    scanf("%d",&input);
+
+    if (isdigit(input)){
+        sql.elem = int [Maxsize];
     }
-    return 1;
+    else {
+        printf("请输入一个有效的数字！");
+    }
 }
 
-ElemType get_elem(SqList &L, int i, int &e)
-{
-    if(i<1||i>L.length)
-        return false;
-    
-    e=L.elem[i-1];
-    return 1;
+void creatlist(struct sqlist *sql){
+    int i;
+
+    sql->elem = malloc(Maxsize * sizeof(int));
+    if(!sql->elem){
+        printf("内存分配失败");
+        return ERROR;
+    }
+    sql->length=0;
+    return OK;
 }
 
-ElemType locate_elem(SqList &L, int e)
-{
-    for(i=0;i<L.length;i++)
-        if(L.elem[i] == e)
-            return i+1;
-    return -1;
+void locateelem(struct sqlist *sql,int elem){
+    int *p;
+    int i=1;
+    p=sql.elem;
+    while(i<sql.length&&(*p++)!=elem)//时间复杂度为O(n)  平均比较次数为n+1/2
+    {
+        ++i;
+    }
+    if(i<=sql.length)
+        return i;
+    else
+        return 0;
 }
 
-ElemType insert_elem(SqList &L, int i, int e)
-{
-    int j=0;
+void listinsert(struct sqlist *sql, int i, int e){//顺序表存在，当1<i<length+1时，在第i个位置之前插入新数据e，然后length+1
+    int *newsql;
+    int j;
 
-    if(i<1||i>L.length+1)
-        return false;
+    if(i<1||i>sql->length+1)
+        return ERROR;
+    if(sql->length == Maxsize){//如果储存空间满了
+        newsql=(int *)realloc((*sql).elem, 
+            (Maxsize + LISTINCREMENT) * sizeof(int); //堆小了，多申请2增量sizeof(int)
+        if(!newsql)
+            printk("连续空间已满");
+            return ERROR;
+        sql->elem = newsql;
+        sql->length = sql->Maxsize + LISTINCREMENT;
+    }
+    for(j=(sql->length)-1; j>=i-1; j--)
+    {
+        sql->elem[j+1]=sql->elem[j];//元素后移
+    }
+    sql->elem[i-1]=e;//在i位置插入元素e
+    //表长+1
+    ++sql->length;
+    return OK;
+}//在长度为n的线性表中插入一个元素所需移动数据元素的平均次数是  E= 求和（n+1）i=1 =n/2;
+//平均时间复杂度为O（n）
 
-    if(L.length == Maxsize)
-        return false;    
-
-    for(int j=i;j<L.length;j++)
-        L.elem[i+1]=L.elem[j]
-        L.length++;
-    
-    return 1;
+void listdelete(struct sqlist *sql,int i,int e){
+    int j;
+    if(i<1||i>sql->length)
+    {
+        return ERROR;
+    }
+    //把删除元素存入e中
+    e = sql->elem[i-1];
+    for (j=i;j<sql->length;j++)
+    {
+        sql->elem[j-1]=sql->elem[j];
+    }
+    sql->length++;
+    return e;
 }
-
-ElemType delete_elem(SqList &L, int i, int e)
-{
-    if(i<1 || i>L.Length)
-        return false;
-
-    e = L.elem[i-1];//把index为i的元素赋值给e   0123i5678
-    for(int j=i;j<=L.length-1;j++)
-        L.elem[j-1]=L.elem[j];//把index为5的j元素赋值给j的上一个位置
-        L.length--;
-}
-
