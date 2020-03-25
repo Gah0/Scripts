@@ -54,7 +54,7 @@ int main (){
 
             case 4:
                 sq = displaysql(&sql);
-                print("%4d",sq);
+                printf("%4d",sq);
             default:
 				printf("没有此功能！\n");
 				break;
@@ -100,7 +100,7 @@ int listinsert(struct sqlist *sql, int i, int e){//顺序表存在，当1<i<leng
     //如果储存空间满了
     //堆小了，多申请2增量sizeof(int)
     if(sql->length == Maxsize){
-        newsql=(int *)realloc((*sql).elem, (Maxsize + LISTINCREMENT) * sizeof(int);
+        newsql=(int *)realloc((*sql).elem, (Maxsize + LISTINCREMENT) * sizeof(int));
     }
 
     if(!newsql){
@@ -108,10 +108,9 @@ int listinsert(struct sqlist *sql, int i, int e){//顺序表存在，当1<i<leng
         return err;
     }
     sql->elem = newsql;
-    sql->length = sql-> Maxsize + LISTINCREMENT;
-    }
+    sql->length = Maxsize + LISTINCREMENT;
 
-    for(j=(sql->length)-1; j>=i-1; j--)
+    for (j=sql->length-1; j>=i-1; j--)
     {
         sql->elem[j+1]=sql->elem[j];//元素后移
     }
@@ -124,7 +123,7 @@ int listinsert(struct sqlist *sql, int i, int e){//顺序表存在，当1<i<leng
 }//在长度为n的线性表中插入一个元素所需移动数据元素的平均次数是  E= 求和（n+1）i=1 =n/2;
 //平均时间复杂度为O（n）
 
-int listdelete(struct sqlist *sql,int i,int e = 0){
+int listdelete(struct sqlist *sql,int i,int e){
     int j;
     int err = 0;
 
