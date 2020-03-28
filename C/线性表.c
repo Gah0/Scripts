@@ -103,7 +103,6 @@ int locateelem(sqlist *sql,int elem){
 int listinsert(sqlist *sql, int i, int e){//顺序表存在，当1<i<length+1时，在第i个位置之前插入新数据e，然后length+1
     int j=0;
     int err=0;
-    sqlist *newsql;
 
     if(i<1||i>sql->length+1){
         return err;
@@ -115,7 +114,7 @@ int listinsert(sqlist *sql, int i, int e){//顺序表存在，当1<i<length+1时
         sql->elem = (int *)realloc(sql->elem, (Maxsize + LISTINCREMENT) * sizeof(int));
     }
 
-    if(!newsql->elem){
+    if(!sql->elem){
         printf("%d\n",sql->elem);
         return -1;
     }
