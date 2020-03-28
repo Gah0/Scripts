@@ -5,7 +5,7 @@
 #define Maxsize 10
 #define LISTINCREMENT 2
 
-typedef struct 
+typedef struct
 {
     int *elem;
     int length;
@@ -15,7 +15,7 @@ int main (){
     sqlist sql;
     int i,e,input,sq;
     int err=0;
-    
+
     do{
 	printf("请输入小键盘数字操作\n");
 	printf("(1)创建链表\n(2)添加数字到链条\n(3)从链条删除数字\n(4)查找数字\n(5)输出sqlist\n");
@@ -61,8 +61,7 @@ int main (){
                 break;
 
             case 5:
-                sq = displaysql(&sql);
-                printf("%4d",sq);
+                displaysql(&sql);
                 break;
 
             default:
@@ -76,8 +75,8 @@ int main (){
 int createlist(sqlist *sql){
     int i;
 
-    sql = (int *)malloc(Maxsize * sizeof(int));
-    if(!sql == NULL){
+    sql->elem = (int *)malloc(Maxsize * sizeof(int));
+    if(!sql->elem){
         printf("内存分配失败\n");
     }
     sql->length = 0;
@@ -102,8 +101,9 @@ int locateelem(sqlist *sql,int elem){
 }
 
 int listinsert(sqlist *sql, int i, int e){//顺序表存在，当1<i<length+1时，在第i个位置之前插入新数据e，然后length+1
-    int j;
+    int j=0;
     int err=0;
+    sqlist *newsql;
 
     if(i<1||i>sql->length+1){
         return err;
@@ -112,21 +112,19 @@ int listinsert(sqlist *sql, int i, int e){//顺序表存在，当1<i<length+1时
     //如果储存空间满了
     //堆小了，多申请2增量sizeof(int)
     if(sql->length == Maxsize){
-        sql->elem = (int *)realloc((*sql).elem, (Maxsize + LISTINCREMENT) * sizeof(int));
-    }//修复野指针sql.elem
-
-    if(sql->elem != NULL){
-        printf("连续空间已满\n");
-        return err;
+        sql->elem = (int *)realloc(sql->elem, (Maxsize + LISTINCREMENT) * sizeof(int));
     }
 
-    sql->elem = e;
-    sql->length = Maxsize + LISTINCREMENT;
-
-    for (j=sql->length-1; j>=i-1; j--)
-    {
-        sql->elem[j+1]=sql->elem[j];//元素后移
+    if(!newsql->elem){
+        printf("%d\n",sql->elem);
+        return -1;
     }
+
+    if(i <= sql->length)
+        for (j=sql->length-1; j>=i-1; j--)
+        {
+            sql->elem[j+1]=sql->elem[j];//元素后移
+        }
     //在i位置插入元素e
     sql->elem[i-1]=e;
     //表长+1
@@ -156,6 +154,6 @@ int listdelete(sqlist *sql,int i,int e){
 
 int displaysql(sqlist *sql){
     for (int i=0;i<sql->length;i++) {
-        return (sql->elem[i]);
+        printf("%d\t\n", sql->elem[i]);
     }
 }
