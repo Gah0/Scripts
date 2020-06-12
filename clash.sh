@@ -1,5 +1,5 @@
 CLASH_DIR=~/home/gah0/programfiles/clash
-wget_link=
+wget_link=\&
 
 update(){
   	cd CLASH_DIR
