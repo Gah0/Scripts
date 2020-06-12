@@ -6,8 +6,7 @@ PASSWD=987654
 
 login(){
   cd ${RJ_PATH}
-  sudo ./rjsupplicant.sh -d 1 -n enx00e04a37770b -u ${RUIJIE_USER} -p ${PASSWD} 
-  sudo service network-manager start
+  ./rjsupplicant.sh -d 1 -n enx00e04a37770b -u ${RUIJIE_USER} -p ${PASSWD} && sudo service network-manager start
   w3m 2.2.2.2
 }
 
