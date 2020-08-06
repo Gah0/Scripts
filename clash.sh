@@ -12,6 +12,15 @@ login(){
 
 update(){
   cd ${CLASH_DIR} 
+  
+  if [ $(env|grep -c "proxy") -eq 4 ];then
+    unset HTTP_PROXY
+	  unset http_proxy
+	  unset HTTPS_PROXY
+	  unset https_proxy
+	  unset ALL_PROXY
+  fi
+  
   wget -O config.yml ${WGET_LINK} 2>&1 | tee tmp.log
 
   if [ $? -ne 0 ] ;then
@@ -20,15 +29,6 @@ update(){
           return 0
       fi
       echo "no reason failed"
-  else
-      if [ $(cat tmp.log | grep "Connection refuse") ]; then
-          unset HTTP_PROXY
-          unset http_proxy
-          unset HTTPS_PROXY
-          unset https_proxy
-          unset ALL_PROXY
-          update
-      fi
   fi
 
   if test -f 'config.yml' ;then
