@@ -1,0 +1,4 @@
+# This file will be read by resetprop
+
+ro.vendor.fod.dimlayer.enable=false
+ro.fod.dimlayer.enable=false

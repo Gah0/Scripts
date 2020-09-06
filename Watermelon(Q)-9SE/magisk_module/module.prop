@@ -1,0 +1,7 @@
+id=Watermelon_kernel
+name=Watermelon Plugin
+version=beta
+versionCode=0903+beta
+author=Gah0
+description=西瓜内核配套Magisk模块, 仅适配西瓜内核. 包含Perfd配置,温控等系统层优化。
+support=https://github.com/Gah0
