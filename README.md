@@ -1,17 +1,17 @@
-Hello, here is my work environment space
+<h1 align="center">bad repository</h1>
 
-i'm a college student and a low-level developer.
-i love use code to Automate work environment.
-the beginning  of creating I forgot to set the repository up as private.
-;p
-
-
-
+-----
+<h6 align="center">Hello, here is my work environment space
+<h6 align="center">i'm a college student and a low-level developer.
+<h6 align="center">i love use code to Automate work environment.
+<h6 align="center">sometimes i change my work exprcise on home and school.
+<h6 align="center">the beginning of creating I forgot to set the repository up as private ;p
+	
 ------
 
-git的一些奇技淫巧
+##git-tips
 
-##git reset 
+###git reset 
 
 假设有一些 commits
 
@@ -33,3 +33,4 @@ git reset --soft/mixed/hard解释
 ###### hard 重置索引和工作区（丢弃所有本地变更）
 
 当使用 git reset --hard B 时，C 添加跟踪的文件，以及当前工作目录中的修改内容，都会丢失。
+
