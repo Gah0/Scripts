@@ -4,19 +4,19 @@
 */
 class Vector{
     public:
-        Vector(int s): elem{new double[s]},sz{s}//构造函数
+        Vector(int s): elem{new double[s]},sz{s}//构造函数,需要析构函数释放资源s
         {
             for(int i = 0;i!=s;i++){
                 elem[i]=0;
             }
         }
     
-    //析构函数，在析构函数中释放他们的技术被称为RAII，避免在一般代码分配内存，隐藏在行为良好的抽象实现内部。避免了裸delete和裸new更不易出错，更不易资源泄露。。
+    //析构函数，在析构函数中释放他们的技术被称为RAII，避免在一般代码分配内存，隐藏在行为良好的抽象实现内部。避免了裸delete和裸new更不易出错，更不易资源泄露。
     Vector(){ 
         delete[] elem; 
     }
 
-    double& operator[](int i);
+    double& operator[](int i); 
     int size() const;
 
     private:
@@ -64,13 +64,11 @@ Vector read(istream& is){
 从read()写入数据到容器v
 Vector v = read(cin);
 
-
-
 /*
  * 
  * */
 Vector::Vector(std::initializer_list<double> lst)
-    :elem{new double[lst.size()]},sz{static_cast<int>(lst.size())}
+    :elem{new double[lst.size()]}, sz{static_cast<int>(lst.size())}
 {
     copy(lst.begin(),lst.end(),elem);
 }
