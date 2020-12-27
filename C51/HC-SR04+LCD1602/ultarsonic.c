@@ -1,9 +1,10 @@
-/* author Gah0
+/* Author Gah0
 /* Ultrasonic ranging module HC - SR04 provides 2cm - 400cm non-contact
 /* measurement function, the ranging accuracy can reach to 3mm. The modules
 /* includes ultrasonic transmitters, receiver and control circuit. The basic principle
 /* of work:
-/* (1) Using IO trigger for at least 10us high level signal,
+/* (1) Using IO trigger for at least 10us high level signal, we hava 2 keys control the Trig IO and Echo IO, 
+/* press key will give a high level on Trig, pressd key2 will give high level on ECHO refuse the block signal.
 /* (2) The Module automatically sends eight 40 kHz and detect whether there is a
 /* pulse signal back.
 /* (3) IF the signal back, through high level , time of high output IO duration is
@@ -11,13 +12,14 @@
 /* Test distance = (high level time×velocity of sound (340M/S) / 2,
 */
 
-#include <reg51.h>
+#include <STC15.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <intrins.h>
 
-#define CRYSTAL_FREQUENCY 11.0592
+#define CRYSTAL_FREQUENCY 110592
+#define VALUE 1.7/100
 #define uchar unsigned char
 #define uint unsigned int
 
@@ -28,12 +30,19 @@
 #define EN_CLR E=0
 #define EN_SET E=1
 
-sbit BEEP = P3^7;
-sbit Echo = P3^2;
-sbit Trig = P3^3;
+sbit Trig = P3^2;
+sbit Echo = P3^3;
+
 sbit RS = P3^4;
 sbit RW = P3^5;
 sbit E = P3^6;
+
+sbit BEEP = P5^4;
+
+sbit key2_stop = P3^6;
+sbit key1_start = P3^7;
+
+
 
 /*
  *  delay();
@@ -52,46 +61,92 @@ void timer_delay10us(){ /* Timer0 delay function */
 	TF0 = 0;						/* Clear timer0 flag */
 }
 
-void udelay(void)		//100微秒@11.0592MHz
+void timer_delay20ms()		//@11.0592MHz
 {
-	AUXR |= 0x80;		//定时器时钟1T模式
-	TMOD &= 0xF0;		//设置定时器模式
-	TL0 = 0xAE;		//设置定时初值
-	TH0 = 0xFB;		//设置定时初值
-	TF0 = 0;		//清除TF0标志
-	TR0 = 1;		//定时器0开始计时
+	unsigned char i, j, k;
+
+	_nop_();
+	_nop_();
+	i = 1;
+	j = 216;
+	k = 35;
+	do
+	{
+		do
+		{
+			while (--k);
+		} while (--j);
+	} while (--i);
 }
 
-/*tweet*/
+void hundelay(void)		//100微秒@11.0592MHz
+{
+	unsigned char i, j, k;
+
+	_nop_();
+	_nop_();
+	i = 43;
+	j = 6;
+	k = 203;
+	do
+	{
+		do
+		{
+			while (--k);
+		} while (--j);
+	} while (--i);
+}
+
+void Delay1ms()		//@11.0592MHz
+{
+	unsigned char i, j;
+
+	_nop_();
+	_nop_();
+	_nop_();
+	i = 11;
+	j = 190;
+	do
+	{
+		while (--j);
+	} while (--i);
+}
+
+void Delay800ms()		//@11.0592MHz
+{
+	unsigned char i, j, k;
+
+	_nop_();
+	_nop_();
+	i = 34;
+	j = 159;
+	k = 59;
+	do
+	{
+		do
+		{
+			while (--k);
+		} while (--j);
+	} while (--i);
+}
+
+
 void tweet1(){
 	BEEP=1;
-	udelay();
+	hundelay();
 	BEEP=0;
 }
 
 void tweet2(){
 	BEEP=1;
-	udelay();
+	hundelay();
 	BEEP=0;
-	udelay();
+	hundelay();
 	BEEP=1;
-	udelay();
+	hundelay();
 	BEEP=0;	
 }
 
-void tweet3(){
-	BEEP=1;
-	udelay();
-	BEEP=0;
-	udelay();
-	BEEP=1;
-	udelay();
-	BEEP=0;
-	udelay();
-	BEEP=1;
-	udelay();
-	BEEP=0;
-}
 
 /*
  * set display panel
@@ -101,7 +156,7 @@ void write_com(uchar cmd){
 		timer_delay10us();
 		RW_CLR;
 		timer_delay10us();
-		P0=cmd;
+		P1=cmd;
 		timer_delay10us();
 		EN_SET;
 		timer_delay10us();
@@ -113,7 +168,7 @@ void write_data(uchar dat){
 		timer_delay10us();
 		RW_CLR;
 		timer_delay10us();
-		P0=dat;
+		P1=dat;
 		timer_delay10us();
 		EN_SET;
 		timer_delay10us();
@@ -133,10 +188,6 @@ void LCD_INIT()
     write_com(0x01);    
 }
 
-/*
- *  �趨��ʾ��
- *  x y
-*/
 void select_str(uchar row, uchar col){
 		uchar addr;
 	
@@ -149,68 +200,119 @@ void select_str(uchar row, uchar col){
 }
 
 void write_str(uchar row, uchar col, uchar *str) {
-
 	select_str(row, col);
     while(*str != '\0'){
         write_data(*str++);
     }
-
 }
 
-void HC_ENDWAIT(){
+void HC_WAIT(){
 	timer_delay10us();
-	if(Trig==1){
-		while(Trig == 0){
+	if(key1_start==1){
+		while(key1_start == 0){
 			Trig = 0;
 		}
 	tweet1();
 	}
 }
 
-void HC_init(){
+void HC_INIT(){
 	Trig = 1;
-	HC_ENDWAIT();
+	HC_WAIT();
 }
 
-void HC_echo(){
+int HC_Data(){
 	while(!Echo);
 	TR0=1;
 	while(Echo);
-	tR0=0;
-	return (TH0 * 256 * TL0) * (12 / CRYSTAL_FREQUENCY);
+	TR0=0;
+
+	return TH0 * 256 * TL0;
 }
 
 float HC_distance(){
 	float dis;
-	dis = HC_echo();
-	dis *= 0.017;
-	if(dis > 450){ 
-		write_str(0,0,"overflow");
-	}
+
+	dis = HC_Data();
+	dis *= VALUE;
+
+	TH0=0;
+	TL0=0;
+
+	delay1ms();
+
+	if(dis > 450)
+		write_str(0,0,"overdtsc");
+		dis = 0;
+	
 	return dis;
 }
 
-int main(){
-	float dis;
 
+void Time0_INIT(void)			//定时器0配置函数
+{
+	TMOD=0x01; 
+	TH0=0;
+	TL0=0;
+	ET0=1; 
+	TR0=1; 
+	EA=1; 
+}
+
+void _init(void)
+{
+	Time0_INIT();
+	Trig=0;
+	Echo=0;
+
+	EA=1;
+//	EX0=1;
+//	ET0=1;             //允许T0中断
+}
+
+void timer0() 
+{
+	while(1)
+		write_str(0,1,"STOP");
+		write_str(1,0,"Gah0.github.io");
+		if(key2_stop == 1){
+			while( key2_stop == 1 ){
+				key2_stop == 0;
+		}
+	}
+}
+
+void check_stop_key(){
+	if(key2_stop = 0){
+		while( key2_stop == 0 ){
+			key2_stop = 1;
+			tweet1();
+			timer0();
+		}
+	}
+}
+
+void LCD_CHAR(){
+	write_str(0,0,"distance:");
+	write_str(0,14,"cm");
+	write_str(1,0,"press key1 on");
+}
+
+int main(){
+	char dis[1];
+
+	_init();
 	LCD_INIT();
-	HC_init();
+	LCD_CHAR();
+	HC_INIT();
 	tweet2();
 
 	while(1){
-		dis = HC_distance();
-		if(Echo = 0){
-			while( Echo == 0 ){
-				Echo = 1;
-				tweet3();
-			}
-			snprintf(buf,"reflush now\n");
-			write_str(0,0,"reflush now\n");
-		}
-		snprintf(buf,"distance=%fcm\n",dis);
-		write_str(0,0,"distance:");
+		dis[1] = HC_distance();
+
+		check_stop_key();
+
 		write_str(0,11,dis);
-		write_str(0,14,"cm");
-		write_str(0,1,"Gah0.github.io");
 	}
+
 }
