@@ -79,7 +79,7 @@ void timer_delay20ms()		//@11.0592MHz
 	} while (--i);
 }
 
-void hundelay(void)		//100微秒@11.0592MHz
+void Delay1000ms()		//@11.0592MHz
 {
 	unsigned char i, j, k;
 
@@ -97,53 +97,19 @@ void hundelay(void)		//100微秒@11.0592MHz
 	} while (--i);
 }
 
-void Delay1ms()		//@11.0592MHz
-{
-	unsigned char i, j;
-
-	_nop_();
-	_nop_();
-	_nop_();
-	i = 11;
-	j = 190;
-	do
-	{
-		while (--j);
-	} while (--i);
-}
-
-void Delay800ms()		//@11.0592MHz
-{
-	unsigned char i, j, k;
-
-	_nop_();
-	_nop_();
-	i = 34;
-	j = 159;
-	k = 59;
-	do
-	{
-		do
-		{
-			while (--k);
-		} while (--j);
-	} while (--i);
-}
-
-
 void tweet1(){
 	BEEP=1;
-	hundelay();
+	Delay1000ms();
 	BEEP=0;
 }
 
 void tweet2(){
 	BEEP=1;
-	hundelay();
+	Delay1000ms();
 	BEEP=0;
-	hundelay();
+	Delay1000ms();
 	BEEP=1;
-	hundelay();
+	Delay1000ms();
 	BEEP=0;	
 }
 
@@ -239,8 +205,6 @@ float HC_distance(){
 	TH0=0;
 	TL0=0;
 
-	delay1ms();
-
 	if(dis > 450)
 		write_str(0,0,"overdtsc");
 		dis = 0;
@@ -265,12 +229,12 @@ void _init(void)
 	Trig=0;
 	Echo=0;
 
-	EA=1;
+// fuck stc register
 //	EX0=1;
 //	ET0=1;             //允许T0中断
 }
 
-void timer0() 
+void stop() 
 {
 	while(1)
 		write_str(0,1,"STOP");
@@ -287,7 +251,7 @@ void check_stop_key(){
 		while( key2_stop == 0 ){
 			key2_stop = 1;
 			tweet1();
-			timer0();
+			stop();
 		}
 	}
 }
