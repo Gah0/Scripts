@@ -2,6 +2,6 @@
 
 ------
 
-测试失败？！
+正常工作！
 
 ### [PCB板子](https://github.com/Gah0/Scripts/PCB/Ultrasonic)
