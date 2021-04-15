@@ -4,4 +4,4 @@
 
 正常工作！
 
-### [PCB板子](https://github.com/Gah0/Scripts/PCB/Ultrasonic)
+### [PCB板子](https://github.com/Gah0/Scripts/tree/master/PCB%20design/Ultrasonic)
