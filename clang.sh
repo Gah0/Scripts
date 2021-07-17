@@ -38,7 +38,7 @@ pack(){
     echo "修改versionCode时间"
     sed -i -e '4cversionCode='"$(date +'%m%d')"'+beta' magisk_module/module.prop
     echo "修改kernelver时间"
-		sed -i -e '4ckernelver = '"$(date +'%Y%m%d')"'' kernel.conf
+		sed -i -e '4ckernelver="'$(date +'%Y%m%d')'"' kernel.conf
 		zip -r Watermelon\(Q\)-9SE-$(date +'%Y%m%d').zip *
 		mv Watermelon\(Q\)-9SE-$(date +'%Y%m%d').zip ..
 		echo "成功生成zip卡刷包，当前时间为" + $(date +'%Y%m%d-%H:%M:%S')
