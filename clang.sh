@@ -114,3 +114,11 @@ push(){
     echo "无法识别当前参数，要不敲下gp试试上传当前分支: " + ${Current_branch}
   fi
 }
+
+
+convert_hex_2_dts(){
+for i in $(ls -l |grep "device");
+    do
+        dtc -I dtb -O dts -o ${i}.dts ${i}
+    done
+}
