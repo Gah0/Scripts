@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 from matplotlib import pyplot as plt
 
 def ft(image):
@@ -19,7 +20,13 @@ def ft(image):
     io=cv2.magnitude(io[:,:,0], io[:,:,1])
     return io
 
-def plot(equ,io):
+def vinr(image):
+    Noise = image.astype('float64')
+    Wiener = wiener(Noise, [3, 3])
+    Wiener = np.uint8(Wiener / Wiener.max() * 255)
+    return Wiener
+
+def plot(equ,io,wienrr):
     plt.figure(figsize=(15,15))
     plt.subplot(331)
     plt.imshow(img)
@@ -35,10 +42,15 @@ def plot(equ,io):
     plt.imshow(io)
     plt.axis('off')
     plt.title('ft result')
+    
+    plt.subplot(334)
+    plt.imshow(wienrr)
+    plt.axis('off')
+    plt.title('wienrr result')
 
 if __name__ == '__main__':
     img = cv2.imread("D:\code\experiment\images\hudie.png",cv2.IMREAD_GRAYSCALE)
     equ=cv2.equalizeHist(img)
     io=ft(equ)
-
+    wienrr=vinr(io)
     plt.show()
