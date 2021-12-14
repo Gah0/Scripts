@@ -40,6 +40,13 @@ def SaltAndPepper(src,percetage):
             SP_NoiseImg[randX,randY]=255 
     return SP_NoiseImg
 
+def find(image):
+    img_cvt = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)  
+    ret, img_bin = cv2.threshold(img_cvt,178,255,cv2.THRESH_BINARY_INV) 
+    contours, img_find = cv2.findContours(img_bin,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)  
+    img_dw=cv2.drawContours(image,contours,-1,(0,0,255),3)   
+    return img_dw
+
 def plot(equ,io,wienrr):
     plt.figure(figsize=(15,15))
     plt.subplot(331)
@@ -68,9 +75,15 @@ def plot(equ,io,wienrr):
     plt.title('sap result')
     
 if __name__ == '__main__':
-    img = cv2.imread("D:\code\experiment\images\hudie.png",cv2.IMREAD_GRAYSCALE)
+    img = cv2.imread("D:\code\experiment\images\cao.png",cv2.IMREAD_GRAYSCALE)
+    img2 = cv2.imread("D:\code\experiment\images\cao.png")
     equ=cv2.equalizeHist(img)
     io=ft(equ)
     wienrr=vinr(io)
     sap=SaltAndPepper(equ,0.15)
     plot(equ,io,wienrr,sap)
+    img_dw=find(img2)
+
+    cv2.imshow("img_dw",img_dw)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
