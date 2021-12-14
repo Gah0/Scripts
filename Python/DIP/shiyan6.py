@@ -1,6 +1,7 @@
 import cv2
 import random
 import numpy as np
+from scipy.signal import wiener
 from matplotlib import pyplot as plt
 
 def ft(image):
@@ -72,4 +73,4 @@ if __name__ == '__main__':
     io=ft(equ)
     wienrr=vinr(io)
     sap=SaltAndPepper(equ,0.15)
-    plt.show()
+    plot(equ,io,wienrr,sap)
