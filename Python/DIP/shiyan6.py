@@ -1,4 +1,5 @@
 import cv2
+import random
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -26,6 +27,18 @@ def vinr(image):
     Wiener = np.uint8(Wiener / Wiener.max() * 255)
     return Wiener
 
+def SaltAndPepper(src,percetage):  
+    SP_NoiseImg=src 
+    SP_NoiseNum=int(percetage*src.shape[0]*src.shape[1]) 
+    for i in range(SP_NoiseNum): 
+        randX=np.random.randint(0,src.shape[0]-1) 
+        randY=np.random.randint(0,src.shape[1]-1) 
+        if np.random.randint(0,1)==0: 
+            SP_NoiseImg[randX,randY]=0 
+        else: 
+            SP_NoiseImg[randX,randY]=255 
+    return SP_NoiseImg
+
 def plot(equ,io,wienrr):
     plt.figure(figsize=(15,15))
     plt.subplot(331)
@@ -48,9 +61,15 @@ def plot(equ,io,wienrr):
     plt.axis('off')
     plt.title('wienrr result')
 
+    plt.subplot(335)
+    plt.imshow(sap)
+    plt.axis('off')
+    plt.title('sap result')
+    
 if __name__ == '__main__':
     img = cv2.imread("D:\code\experiment\images\hudie.png",cv2.IMREAD_GRAYSCALE)
     equ=cv2.equalizeHist(img)
     io=ft(equ)
     wienrr=vinr(io)
+    sap=SaltAndPepper(equ,0.15)
     plt.show()
