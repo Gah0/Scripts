@@ -47,6 +47,38 @@ def find(image):
     img_dw=cv2.drawContours(image,contours,-1,(0,0,255),3)   
     return img_dw
 
+def total_entropy(img):
+    n=[]
+    P=[]
+    grey_lvl=0
+    k=0
+    res=0 
+    #test = [[5,4,3,2,1]]
+    weight = img.shape[0]
+    height = img.shape[1]
+    total = weight * height
+
+    for i in range(256):
+        n.append(0)
+
+    for i in range(weight):
+        for j in range(height):
+            grey_lvl = img[i][j]
+            n[grey_lvl] = float(n[grey_lvl] + 1)
+            k = float(k+1)
+            
+    P=n
+    for i in range(len(n)):
+        P[i] = (n[i]/k)
+
+    for i in range(len(n)):
+        if(P[i]==0):
+            res = res
+        else:
+            res = float(res - P[i]*(math.log(P[i])/math.log(2.0)))
+
+    return res
+
 def plot(equ,io,wienrr):
     plt.figure(figsize=(15,15))
     plt.subplot(331)
@@ -83,7 +115,10 @@ if __name__ == '__main__':
     sap=SaltAndPepper(equ,0.15)
     plot(equ,io,wienrr,sap)
     img_dw=find(img2)
-
+    
+    print("entropy=%f"%total_entropy(img))
+    print("compression ratio=%f"%(total_entropy(img)/8.0))
+    
     cv2.imshow("img_dw",img_dw)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
