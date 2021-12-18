@@ -127,7 +127,7 @@ def calcarea(contours):
         area += cv2.contourArea(i)
     return area
 
-def plot(equ,io,wienrr):
+def plot(equ,io,wienrr,sap):
     plt.figure(figsize=(15,15))
     plt.subplot(331)
     plt.imshow(img)
