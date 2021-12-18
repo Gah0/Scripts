@@ -1,4 +1,5 @@
 import cv2
+import math
 import random
 import numpy as np
 from scipy.signal import wiener
@@ -167,10 +168,8 @@ if __name__ == '__main__':
     img_rg = regiong(img, seeds, 5)
     
     print("entropy=%f"%total_entropy(img))
-    print("compression ratio=%f"%(total_entropy(img)/8.0))
+    print("compression ratio=%f%%"%(total_entropy(img)/8.0*100))
     print("calc Area=%f"%contours_area)
-    
-
     
     cv2.imshow("img_dw",img_dw)
     cv2.imshow("img_rg",img_rg)
