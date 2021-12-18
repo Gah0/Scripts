@@ -79,6 +79,47 @@ def total_entropy(img):
 
     return res
 
+class Point(object):
+    def __init__(self,x,y):
+        self.x=x
+        self.y=y
+
+def getgraydiff(img,currentPoint,tmpPoint):
+    return abs(int(img[currentPoint.x, currentPoint.y]) - int(img[tmpPoint.x, tmpPoint.y]))
+
+# operator
+def selectcon(p):
+    if p != 0:
+        connects = [Point(-1, -1), Point(0, -1), Point(1, -1), Point(1, 0), Point(1, 1), Point(0, 1), Point(-1, 1), Point(-1, 0)]
+    else:
+        connects = [Point(0, -1), Point(1, 0), Point(0, 1), Point(-1, 0)]
+    return connects
+
+def regiong(img,seeds,thresh,p=1):
+    height,weight = img.shape
+    seedMart = np.zeros(img.shape)
+    seedList = []
+    for seed in seeds:
+        seedList.append(seed)
+    
+    label = 1
+    connects = selectcon(p)
+    while(len(seedList)>0):
+        currentPoint = seedList.pop(0)
+
+        seedMart[currentPoint.x,currentPoint.y] = label
+        for i in range(8):
+            tmpX = currentPoint.x + connects[i].x
+            tmpY = currentPoint.y+ connects[i].y
+            if tmpX<0 or tmpY < 0 or tmpX >=height or tmpY >= weight:
+                continue
+                
+            graydiff=getgraydiff(img, currentPoint, Point(tmpX,tmpY))
+            if graydiff < thresh and seedMart[tmpX,tmpY]==0:
+                seedMart[tmpX,tmpY] = label
+                seedList.append(Point(tmpX,tmpY))
+    return seedMart
+
 def calcarea(contours):
     area = 0
     for i in contours:
@@ -122,11 +163,16 @@ if __name__ == '__main__':
     plot(equ,io,wienrr,sap)
     img_dw, contours=find(img2)
     contours_area=calcarea(contours)
-
+    seeds = [Point(366,321)]
+    img_rg = regiong(img, seeds, 5)
+    
     print("entropy=%f"%total_entropy(img))
     print("compression ratio=%f"%(total_entropy(img)/8.0))
     print("calc Area=%f"%contours_area)
     
+
+    
     cv2.imshow("img_dw",img_dw)
+    cv2.imshow("img_rg",img_rg)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
