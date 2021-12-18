@@ -76,9 +76,30 @@ def find(image):
     img_dw=cv2.drawContours(image,contours,-1,(0,0,255),3)   
     return img_dw, contours
 
+def dec2bin(p):
+    floatbinstr = ""
+    if p == 0:
+        return floatbinstr
+
+    for kk in range(len(str(p))-2):
+        p *= 2
+        if p>1:
+            floatbinstr += "1"
+            p = p - int(p)
+        else: 
+            floatbinstr += "0"
+
+        if p == 0:
+            break
+        
+        return str(floatbinstr)
+
+
 def total_entropy(img):
     n=[]
     P=[]
+    lenavg=[]
+    avg_sum=0
     grey_lvl=0
     k=0
     res=0 
@@ -96,9 +117,22 @@ def total_entropy(img):
             n[grey_lvl] = float(n[grey_lvl] + 1)
             k = float(k+1)
             
+    for i in range(256):
+        P.append(0)
+
     P=n
     for i in range(len(n)):
         P[i] = (n[i]/k)
+
+    for i in range(256):
+        lenavg.append(0)
+
+    lenavg=P
+    for i in range(len(n)):
+        if P[i] == 0.0:
+            continue
+        lenavg[i] = lenavg[i] * len(dec2bin(lenavg[i]))
+        avg_sum = lenavg[i] + avg_sum
 
     for i in range(len(n)):
         if(P[i]==0):
@@ -106,7 +140,7 @@ def total_entropy(img):
         else:
             res = float(res - P[i]*(math.log(P[i])/math.log(2.0)))
 
-    return res
+    return res, avg_sum
 
 class Point(object):
     def __init__(self,x,y):
@@ -217,6 +251,11 @@ if __name__ == '__main__':
     cv2.waitKey(0)
     cv2.destroyAllWindows()
     
-    print("entropy=%f"%total_entropy(img_origin))
-    print("compression ratio=%f%%"%(total_entropy(img_origin)/8.0*100))
+    H,lavg = total_entropy(img_grey)
+    C=float(H/lavg*100)
+    R=1-(1/C)
+    print("entropy=%f"%H)
+    print("compression ratio=%f%%"%C)
+    print("coding redundancy=%f"%R)
     print("calc Area=%f"%contours_area)
+
