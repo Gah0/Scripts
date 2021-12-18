@@ -6,28 +6,56 @@ from scipy.signal import wiener
 from matplotlib import pyplot as plt
 
 def ft(image):
-    img_dft=cv2.dft(np.float32(equ),
+    img_dft=cv2.dft(np.float32(image),
                     flags=cv2.DFT_COMPLEX_OUTPUT)
     #result_dft = 20*np.log(cv2.magnitude(img_dft[:,:,0],
     #                                img_dft[:,:,1]))
     img_dft_shift = np.fft.fftshift(img_dft)
     #result_shift = 20*np.log(cv2.magnitude(img_dft_shift[:,:,0],
     #                                img_dft_shift[:,:,1]))
-    rs,cs=equ.shape
+    rs,cs=image.shape
     cr,cc=int(rs/2),int(cs/2)
     mask=np.zeros((rs,cs,2),np.int8)
-    mask[cr-40:cr+40,cc-40:cc+40] =1
+    mask[cr-40:cr+40,cc-40:cc+40] = 1
     md=img_dft_shift*mask
     imd=np.fft.ifftshift(md)
     io=cv2.idft(imd)
-    io=cv2.magnitude(io[:,:,0], io[:,:,1])
-    return io
+    img_lowpass=cv2.magnitude(io[:,:,0], io[:,:,1])
+    return img_lowpass
 
 def vinr(image):
-    Noise = image.astype('float64')
-    Wiener = wiener(Noise, [3, 3])
-    Wiener = np.uint8(Wiener / Wiener.max() * 255)
-    return Wiener
+#   val
+    kernel_size = 15
+    angle = 60
+    eps = 1e-3
+#   bluropreator
+    PSF=np.diag(np.ones(kernel_size))
+    angle = angle+45
+    M=cv2.getRotationMatrix2D(((kernel_size/2,kernel_size/2)), angle, 1)
+    PSF = cv2.warpAffine(PSF, M, (kernel_size, kernel_size), flags=cv2.INTER_LINEAR)
+    PSF = PSF / PSF.sum()
+    [img_h,img_w] = image.shape
+    [h,w] = PSF.shape
+    PSF0 = PSF
+    Result_PSF=np.zeros((img_h,img_w))
+    Result_PSF[0:h, 0:w] = PSF0 
+#   ft*PSF
+    img_fft =np.fft.fft2(image)   
+    PSF_fft0 = np.fft.fft2(Result_PSF) + eps 
+    blurred = np.fft.ifft2(img_fft * PSF_fft0)  
+    img_blurred = np.abs(blurred)
+#   BLUR_noisy
+    blurred_noisy = blurred + 0.1 * blurred.std() * \
+                        np.random.standard_normal(blurred.shape)
+#   wienrnr
+    K=0.01
+    blurred_noisy_fft = np.fft.fft2(blurred_noisy)
+    Result_PSF_fft = np.fft.fft2(Result_PSF)
+    Result_PSF_fft1 = (np.conj(Result_PSF_fft) / (np.abs(Result_PSF_fft)**2 + K))*blurred_noisy_fft         
+    result = np.fft.ifft2(Result_PSF_fft1)
+    img_wie = np.abs(result)
+    return img_blurred,img_wie
+
 
 def SaltAndPepper(src,percetage):  
     SP_NoiseImg=src 
@@ -127,51 +155,68 @@ def calcarea(contours):
         area += cv2.contourArea(i)
     return area
 
-def plot(equ,io,wienrr,sap):
-    plt.figure(figsize=(15,15))
-    plt.subplot(331)
-    plt.imshow(img)
+def plot():
+    plt.figure(figsize=(25,25))
+    plt.subplot(241)
+    plt.imshow(cv2.imread("D:\code\experiment\images\cao.png"),cmap="gray")
     plt.axis('off')
     plt.title('original')
 
-    plt.subplot(332)
-    plt.imshow(equ)
+    plt.subplot(242)
+    plt.imshow(img_grey,cmap="gray")
     plt.axis('off')
-    plt.title('eq2')
+    plt.title('grey original')
 
-    plt.subplot(333)
-    plt.imshow(io)
+    plt.subplot(243)
+    plt.imshow(img_equ,cmap="gray")
+    plt.axis('off')
+    plt.title('grey with eq2(brighter)')
+
+    plt.subplot(244)
+    plt.imshow(img_lowpass,cmap="gray")
     plt.axis('off')
     plt.title('ft result')
-    
-    plt.subplot(334)
-    plt.imshow(wienrr)
+    plt.subplot(245)
+    plt.imshow(img_psf,cmap="gray")
+    plt.axis('off')
+    plt.title('ft with psf result')
+    plt.subplot(246)
+    plt.imshow(img_wienrr,cmap="gray")
     plt.axis('off')
     plt.title('wienrr result')
 
-    plt.subplot(335)
-    plt.imshow(sap)
+    plt.subplot(247)
+    plt.imshow(img_sap)
     plt.axis('off')
     plt.title('sap result')
-    
+
+    plt.subplot(248)
+    plt.imshow(img_mb)
+    plt.axis('off')
+    plt.title('sap result with medianBlur')
+
 if __name__ == '__main__':
-    img = cv2.imread("D:\code\experiment\images\cao.png",cv2.IMREAD_GRAYSCALE)
-    img2 = cv2.imread("D:\code\experiment\images\cao.png")
-    equ=cv2.equalizeHist(img)
-    io=ft(equ)
-    wienrr=vinr(io)
-    sap=SaltAndPepper(equ,0.15)
-    plot(equ,io,wienrr,sap)
-    img_dw, contours=find(img2)
+    img_grey = cv2.imread("D:\code\experiment\images\cao.png",cv2.IMREAD_GRAYSCALE)
+    img_origin = cv2.imread("D:\code\experiment\images\cao.png")
+
+    img_equ = cv2.equalizeHist(img_grey)
+    img_lowpass = ft(img_grey)
+    img_psf,img_wienrr = vinr(img_grey)
+    img_sap = SaltAndPepper(img_origin,0.15)
+    img_mb = cv2.medianBlur(img_sap,15)
+    plot()
+
+    img_dw, contours=find(img_origin)
     contours_area=calcarea(contours)
+
     seeds = [Point(366,321)]
-    img_rg = regiong(img, seeds, 5)
-    
-    print("entropy=%f"%total_entropy(img))
-    print("compression ratio=%f%%"%(total_entropy(img)/8.0*100))
-    print("calc Area=%f"%contours_area)
-    
+    img_rg = regiong(img_grey, seeds, 5)
+
     cv2.imshow("img_dw",img_dw)
     cv2.imshow("img_rg",img_rg)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+    
+    print("entropy=%f"%total_entropy(img_origin))
+    print("compression ratio=%f%%"%(total_entropy(img_origin)/8.0*100))
+    print("calc Area=%f"%contours_area)
