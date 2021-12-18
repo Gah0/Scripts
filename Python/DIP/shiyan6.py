@@ -45,7 +45,7 @@ def find(image):
     ret, img_bin = cv2.threshold(img_cvt,178,255,cv2.THRESH_BINARY_INV) 
     contours, img_find = cv2.findContours(img_bin,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)  
     img_dw=cv2.drawContours(image,contours,-1,(0,0,255),3)   
-    return img_dw
+    return img_dw, contours
 
 def total_entropy(img):
     n=[]
@@ -78,6 +78,12 @@ def total_entropy(img):
             res = float(res - P[i]*(math.log(P[i])/math.log(2.0)))
 
     return res
+
+def calcarea(contours):
+    area = 0
+    for i in contours:
+        area += cv2.contourArea(i)
+    return area
 
 def plot(equ,io,wienrr):
     plt.figure(figsize=(15,15))
@@ -114,10 +120,12 @@ if __name__ == '__main__':
     wienrr=vinr(io)
     sap=SaltAndPepper(equ,0.15)
     plot(equ,io,wienrr,sap)
-    img_dw=find(img2)
-    
+    img_dw, contours=find(img2)
+    contours_area=calcarea(contours)
+
     print("entropy=%f"%total_entropy(img))
     print("compression ratio=%f"%(total_entropy(img)/8.0))
+    print("calc Area=%f"%contours_area)
     
     cv2.imshow("img_dw",img_dw)
     cv2.waitKey(0)
