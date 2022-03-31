@@ -1,5 +1,7 @@
 #include "stm32f10x.h"
+#include "usart.h"
 #include "stdio.h"
+
 extern uint8_t RxBuffer[256];
 extern uint16_t RxCounter;
 
@@ -42,7 +44,7 @@ void USART1_Init(uint32_t bound)
 
 }	
 
-void USART3_init(uint32_t bound)
+void USART3_Init(uint32_t bound)
 {
 	GPIO_InitTypeDef GPIO_InitStruct;  
 	USART_InitTypeDef USART_InitStruct;   
