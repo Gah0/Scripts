@@ -139,3 +139,8 @@ void USART3_IRQHandler(void){
 		USART_ClearITPendingBit(USART3,USART_IT_RXNE);
 	}	
 }
+
+void CLR_Buf3(void){
+		memset(USART3_RX_BUF,'\0',sizeof(char));
+		USART3_RX_STA=0;
+}
