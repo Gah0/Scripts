@@ -1,6 +1,7 @@
 #include "stm32f10x.h"
 #include "usart.h"
 #include "stdio.h"
+#include <string.h>
 
 extern uint8_t RxBuffer[256];
 extern uint16_t RxCounter;
@@ -123,21 +124,22 @@ void USART3_IRQHandler(void){
 			res = USART_ReceiveData(USART3);
 			USART3_RX_BUF[USART3_RX_STA]=res;
 			if(USART3_RX_BUF[USART3_RX_STA]=='K'){
-				if(USART3_RX_BUF[USART3_RX_STA - 1]=='O')
-				{
+				if(USART3_RX_BUF[USART3_RX_STA - 1]=='O'){
 					Flag_usart3_receive_OK= 1;
 				}
+				else{
+					Flag_usart3_receive_OK= 0;
+				}	
 			}
-		else{
-			Flag_usart3_receive_OK= 0;
 		}
+		
 		USART3_RX_STA++;
 		if(USART3_RX_STA > (USART3_REC_LEN - 1))
 		{
-			USART3_RX_STA =0 ;
+			USART3_RX_STA =0;
 		}
-		USART_ClearITPendingBit(USART3,USART_IT_RXNE);
-	}	
+		
+		USART_ClearITPendingBit(USART3,USART_IT_RXNE);	
 }
 
 void CLR_Buf3(void){
