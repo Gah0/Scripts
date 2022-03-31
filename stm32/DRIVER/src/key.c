@@ -51,7 +51,7 @@ void EXTI3_IRQHandler(void)
 {
 	Delay_ms(100);
 	if(GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_3)==0)
-	printf("key1\r\n");
+	printf("You are pressed bottom1 for external interupt,the priority is key4=3>1>2\r\n");
 	
 	EXTI_ClearITPendingBit(EXTI_Line3);
 	}
@@ -63,7 +63,7 @@ void EXTI4_IRQHandler(void)
 {
 	Delay_ms(100);
 	if(GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_4)==0)
-	printf("key2\r\n");
+	printf("You are pressed bottom2 for external interupt, the priority is key4=3>1>2\r\n");
 	
 	EXTI_ClearITPendingBit(EXTI_Line4);
 	}
@@ -75,7 +75,7 @@ void EXTI9_5_IRQHandler(void)
 	{
 	Delay_ms(100);
 	if(GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_5)==0)
-	printf("key3\r\n");
+	printf("You are pressed bottom3 for external interupt,the priority is key4=3>1>2\r\n");
 	
 	EXTI_ClearITPendingBit(EXTI_Line5);
 	}
@@ -83,7 +83,7 @@ void EXTI9_5_IRQHandler(void)
 	{
 	Delay_ms(100);
 	if(GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_6)==0)
-	printf("key4\r\n");
+	printf("You are pressed bottom4 for external interupt,the priority is key4=3>1>2\r\n");
 	
 	EXTI_ClearITPendingBit(EXTI_Line6);
 	}
