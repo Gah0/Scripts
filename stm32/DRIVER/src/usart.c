@@ -3,14 +3,6 @@
 extern uint8_t RxBuffer[256];
 extern uint16_t RxCounter;
 
-struct usartf{
-	char Flag_usart3_receive_OK;
-	char Flag_usart2_receive ;
-	int USART3_RX_STA;
-	char USART3_RX_BUF[USART2_REC_LEN];
-}flag={0,0,0,{0}};
-
-
 void USART1_Init(uint32_t bound)
 {
 	GPIO_InitTypeDef GPIO_InitStructure; 
