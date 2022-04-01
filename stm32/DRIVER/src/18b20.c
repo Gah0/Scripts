@@ -151,7 +151,7 @@ unsigned int DS18B20_Temper(void)
    DS18B20_Write_Byte(0xbe);//convert
    TL=DS18B20_Read_Byte();// LSB   
    TH=DS18B20_Read_Byte();// MSB  
-   if(TH>7)//£¨TH>xxxxx111£©negetive
+   if(TH>7)//ï¿½ï¿½TH>xxxxx111ï¿½ï¿½negetive
    {
        TH=~TH;
 			 TL=~TL;

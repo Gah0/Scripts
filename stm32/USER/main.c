@@ -29,7 +29,6 @@ int main(void)
 	while(1)
 	{ 
 		Delay_ms(2000);
-		DS18B20_start();
 		temperature=DS18B20_Temper(); 
 	}
 }
