@@ -29,13 +29,14 @@ int main(void)
 	WIFI_Init();
 	while(1)
 	{ 
-		Delay_ms(2000);
+		//Delay_ms(2000);
 		if(TenSensorflag==1){
 			temperature=DS18B20_Temper(); 
 			tmp=temperature*0.1;
 			Client_Pub(tmp);
 			TenSensorflag=0;
 		}
+		wait_SUB();
 	}
 }
 				

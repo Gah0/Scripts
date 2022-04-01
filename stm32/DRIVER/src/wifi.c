@@ -97,17 +97,29 @@ void wait_OK(void){
 }
 
 void wait_SUB(void){
+  char* ret;
+  char str[10];
+  int val;
   int len=strlen(USART3_RX_BUF);
   if(len>10){
     USART_SendString(USART1, USART3_RX_BUF);
+    ret = strstr(USART3_RX_BUF,"light")
+    if(ret!=NULL){
+      printf("this is %s",ret);
+      str[0]=*(ret+7);
+      str[1]=*(ret+8);
+      str[2]='\0';
+      printf("this is str %s \r\n",str);
+      val = atoi(str);
+      printf("this is val %s",val);
+    }
+    CLR_Buf3();
   }
-  
-  CLR_Buf3();
 }
 
 void WIFI_Init(void){		
   WIFI_Rst();
-  Setting_Connect_Work("3");
+  Setting_Connect_Work("1");
   wait_OK();
 
   Login_URL();
