@@ -34,6 +34,7 @@ int main(void)
 			temperature=DS18B20_Temper(); 
 			tmp=temperature*0.1;
 			Client_Pub(tmp);
+			TenSensorflag=0;
 		}
 	}
 }
