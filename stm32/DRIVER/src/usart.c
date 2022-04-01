@@ -7,7 +7,7 @@ extern uint8_t RxBuffer[256];
 extern uint16_t RxCounter;
 
 char Flag_usart3_receive_OK=0;
-char Flag_usart3_receive=0 ;
+char Flag_usart3_receive=0;
 int USART3_RX_STA=0;
 char USART3_RX_BUF[USART3_REC_LEN];
 
@@ -118,31 +118,32 @@ void USART1_IRQHandler(void)
 }	
 
 void USART3_IRQHandler(void){
-		u8 res;
+	u8 res;
 
-		if(USART_GetITStatus(USART3,USART_IT_RXNE)!=RESET){
-			res = USART_ReceiveData(USART3);
-			USART3_RX_BUF[USART3_RX_STA]=res;
-			if(USART3_RX_BUF[USART3_RX_STA]=='K'){
-				if(USART3_RX_BUF[USART3_RX_STA - 1]=='O'){
-					Flag_usart3_receive_OK= 1;
-				}
-				else{
-					Flag_usart3_receive_OK= 0;
-				}	
+	if(USART_GetITStatus(USART3,USART_IT_RXNE)!=RESET){
+		res = USART_ReceiveData(USART3);
+		USART3_RX_BUF[USART3_RX_STA]=res;
+		if(USART3_RX_BUF[USART3_RX_STA]=='K'){
+			if(USART3_RX_BUF[USART3_RX_STA - 1]=='O'){
+				Flag_usart3_receive_OK= 1;
 			}
 		}
-		
-		USART3_RX_STA++;
-		if(USART3_RX_STA > (USART3_REC_LEN - 1))
-		{
-			USART3_RX_STA =0;
-		}
-		
-		USART_ClearITPendingBit(USART3,USART_IT_RXNE);	
+	else{
+		Flag_usart3_receive_OK= 0;
+	}
+	}
+	
+	USART3_RX_STA++;
+	if(USART3_RX_STA > (USART3_REC_LEN - 1))
+	{
+		USART3_RX_STA =0;
+	}
+	
+	USART_ClearITPendingBit(USART3,USART_IT_RXNE);	
 }
 
+
 void CLR_Buf3(void){
-		memset(USART3_RX_BUF,'\0',sizeof(char));
-		USART3_RX_STA=0;
+	memset(USART3_RX_BUF,'\0',sizeof(char));
+	USART3_RX_STA=0;
 }
