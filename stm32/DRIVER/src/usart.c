@@ -129,7 +129,7 @@ void USART3_IRQHandler(void){
 			}
 		}
 	else{
-		Flag_usart3_receive_OK= 0;
+		Flag_usart3_receive_OK= 1;
 	}
 	}
 	
