@@ -30,9 +30,11 @@ int main(void)
 	while(1)
 	{ 
 		Delay_ms(2000);
-		temperature=DS18B20_Temper(); 
-		tmp=temperature*0.1;
-		Client_Pub(tmp);
+		if(TenSensorflag==1){
+			temperature=DS18B20_Temper(); 
+			tmp=temperature*0.1;
+			Client_Pub(tmp);
+		}
 	}
 }
 				

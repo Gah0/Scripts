@@ -1,6 +1,8 @@
 #include "stm32f10x.h"
 #include "digital.h"
 char T=0;
+char ctr=0;
+char TenSensorflag = 0;
 extern unsigned int temperature;
 
 void TIM3_Init(uint32_t per,uint32_t psc)
@@ -35,9 +37,15 @@ void TIM3_IRQHandler (void)
 //		GPIOC->ODR^=GPIO_Pin_13;
 	
 		Digital_Display(temperature,T);
-		if(T<3)
-		T++;
-		else T=0;
+		if(T<3){T++;}
+		else {T=0;}
+
+		if(ctr<2000){
+			ctr++;
+		}else{
+			ctr=0;
+			TenSensorflag=1;
+		}
 		
 		TIM_ClearITPendingBit(TIM3,TIM_IT_Update);
 	}
