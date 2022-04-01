@@ -13,6 +13,7 @@
 uint8_t RxBuffer[256]="";
 uint16_t RxCounter=0;
 unsigned int temperature=0;
+float tmp = 0;
 
 int main(void)
 { uint16_t RxData;
@@ -30,6 +31,8 @@ int main(void)
 	{ 
 		Delay_ms(2000);
 		temperature=DS18B20_Temper(); 
+		tmp=temperature*0.1;
+		Client_Pub(tmp);
 	}
 }
 				
