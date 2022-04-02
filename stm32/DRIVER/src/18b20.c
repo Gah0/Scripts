@@ -18,7 +18,7 @@ void DS18B20_IO_IN(void){
 		GPIO_Init(GPIOA, &GPIO_InitStructure);
 }
  
-unsigned char DS18B20_Reset(void)               
+void DS18B20_Reset(void)               
 {
     DS18B20_IO_OUT(); 
     DS18B20_DQ_OUT=0; 
@@ -100,8 +100,6 @@ void DS18B20_Write_Byte(u8 value)
 unsigned char DS18B20_Read_Bit(void) 
 {
 	u8 data;
-  unsigned char i;
-  unsigned char value = 0;
 	
 	DS18B20_IO_OUT();
 	DS18B20_DQ_OUT=0; 
@@ -151,7 +149,7 @@ unsigned int DS18B20_Temper(void)
    DS18B20_Write_Byte(0xbe);//convert
    TL=DS18B20_Read_Byte();// LSB   
    TH=DS18B20_Read_Byte();// MSB  
-   if(TH>7)//��TH>xxxxx111��negetive
+   if(TH>7)//negetive
    {
        TH=~TH;
 			 TL=~TL;
@@ -164,6 +162,8 @@ unsigned int DS18B20_Temper(void)
    tem<<=8;   
    tem+=TL;
    tem=(float)tem*0.625;
-   if(temp) return tem; 
-   else  return -tem;    
+   if(temp) 
+		 return tem; 
+   else  
+		 return -tem;    
 }

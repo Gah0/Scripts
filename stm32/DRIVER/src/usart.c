@@ -146,4 +146,4 @@ void USART3_IRQHandler(void){
 void CLR_Buf3(void){
 	memset(USART3_RX_BUF,'\0',sizeof(char));
 	USART3_RX_STA=0;
-}
+}}

@@ -12,5 +12,5 @@ GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
 GPIO_Init(GPIOC, &GPIO_InitStructure);
 
 GPIO_SetBits(GPIOC, GPIO_Pin_13);	
-
 }
+
