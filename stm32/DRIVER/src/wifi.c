@@ -3,7 +3,6 @@
 
 extern	char Flag_usart3_receive_OK;
 extern	char Flag_usart3_receive;
-extern	int USART3_RX_STA;
 extern	char USART3_RX_BUF[USART3_REC_LEN];
 
 void WIFI_Rst(void){
