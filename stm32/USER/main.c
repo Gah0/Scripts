@@ -12,12 +12,14 @@
 
 uint8_t RxBuffer[256]="";
 uint16_t RxCounter=0;
+
+extern char TenSensorflag;
 unsigned int temperature=0;
 float tmp = 0;
 
 int main(void)
-{ uint16_t RxData;
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+	//uint16_t RxData='a';
 	LED_Init();
 	Delay_Init();
 	USART1_Init(115200);
@@ -29,13 +31,12 @@ int main(void)
 	WIFI_Init();
 	while(1)
 	{ 
-		//Delay_ms(2000);
 		Delay_ms(2000);
 		if(TenSensorflag==1){
 			temperature=DS18B20_Temper(); 
 			tmp=temperature*0.1;
 			Client_Pub(tmp);
-			TenSensorflag=0;
+			TenSensorflag = 0;
 		}
 		wait_SUB();
 	}
