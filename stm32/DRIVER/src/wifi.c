@@ -82,8 +82,8 @@ void Client_Pub(float temp){
   USART_SendString(USART1, "publish\r\n");
   sprintf(str,":%0.1f}}\"",temp);
   strcat(client_subscribe_buf,str);
-  strcat(client_subscribe_buf,",0,0");
-  strcat(client_subscribe_buf,"\r\n");
+  strcat(client_subscribe_buf,",0,0\r\n");
+
   USART_SendString(USART3, client_subscribe_buf);
   USART_SendString(USART1, client_subscribe_buf);
   wait_OK();
