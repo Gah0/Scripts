@@ -98,7 +98,6 @@ void Client_Subscribe(void){
 void Client_Pub(float temp){
   char str[20];
   char client_subscribe_buf[200]={"AT+MQTTPUB=0,\"/sys/**********/device/thing/event/property/post\",\"{\\\"params\\\":{\\\"temperture\\\""};
-  USART_SendString(USART1, "publish\r\n");
   sprintf(str,":%0.1f}}\"",temp);
   strcat(client_subscribe_buf,str);
   strcat(client_subscribe_buf,",0,0\r\n");
