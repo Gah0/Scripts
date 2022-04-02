@@ -1,8 +1,12 @@
 #include "stm32f10x.h"
 #include "digital.h"
-char T=0;
-char ctr=0;
 char TenSensorflag = 0;
+
+struct counter{
+	char digital_ctr;
+	unsigned int ctr;
+}flag={0,0};
+
 extern unsigned int temperature;
 
 void TIM3_Init(uint32_t per,uint32_t psc)
@@ -25,7 +29,6 @@ void TIM3_Init(uint32_t per,uint32_t psc)
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2; 
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; 
 	NVIC_Init(&NVIC_InitStructure);
-		
 	
 	TIM_Cmd(TIM3, ENABLE);
 }
@@ -35,18 +38,20 @@ void TIM3_IRQHandler (void)
 	if(TIM_GetITStatus(TIM3,TIM_IT_Update) == SET) 
 	{ 
 //		GPIOC->ODR^=GPIO_Pin_13;
-	
-		Digital_Display(temperature,T);
-		if(T<3){T++;}
-		else {T=0;}
-
-		if(ctr<2000){
-			ctr++;
-		}else{
-			ctr=0;
+		Digital_Display(temperature,flag.digital_ctr);
+		if(flag.digital_ctr<3)
+			flag.digital_ctr++;
+		else 
+			flag.digital_ctr=0;
+		
+		if(flag.ctr<2000)
+			flag.ctr++;
+		else 
+		{
+			flag.ctr=0;
 			TenSensorflag=1;
 		}
-		
+
 		TIM_ClearITPendingBit(TIM3,TIM_IT_Update);
 	}
 
