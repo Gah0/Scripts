@@ -9,12 +9,12 @@ extern	char USART3_RX_BUF[USART3_REC_LEN];
 void WIFI_Rst(void){
   USART_SendString(USART1,"RST module...\r\n");
   USART_SendString(USART3,"AT+RST\r\n");
-  Delay_us(1000);
-  Delay_us(1000);
-  Delay_us(1000);
-  Delay_us(1000);
-  Delay_us(1000);
-  Delay_us(1000);
+  Delay_ms(1000);
+  Delay_ms(1000);
+  Delay_ms(1000);
+  Delay_ms(1000);
+  Delay_ms(1000);
+  Delay_ms(1000);
   CLR_Buf3();
   Flag_usart3_receive_OK=0;
 }

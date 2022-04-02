@@ -20,8 +20,8 @@ int main(void)
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 	LED_Init();
 	Delay_Init();
-	USART1_Init(9600);
-	USART3_Init(9600);
+	USART1_Init(115200);
+	USART3_Init(115200);
 	KEY_Init();
 	TIM3_Init(49,7199);
 	Digital_Init();
@@ -30,6 +30,7 @@ int main(void)
 	while(1)
 	{ 
 		//Delay_ms(2000);
+		Delay_ms(2000);
 		if(TenSensorflag==1){
 			temperature=DS18B20_Temper(); 
 			tmp=temperature*0.1;
