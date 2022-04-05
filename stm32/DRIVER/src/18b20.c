@@ -142,7 +142,7 @@ unsigned int DS18B20_Temper(void)
    u8 temp;
    u8 TL,TH;
    short tem;
-   DS18B20_start();                    // ds1820 start convert
+   DS18B20_start();// ds1820 start convert
    DS18B20_Reset();
    DS18B20_Check();
    DS18B20_Write_Byte(0xcc);// skip rom

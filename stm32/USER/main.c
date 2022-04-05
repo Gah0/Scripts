@@ -2,7 +2,7 @@
 #include "led.h"
 #include "delay.h"
 #include "usart.h"
-#include "stdio.h"
+//#include "stdio.h"
 #include "string.h"
 #include "key.h"
 #include "timer.h"
@@ -12,14 +12,13 @@
 
 uint8_t RxBuffer[256]="";
 uint16_t RxCounter=0;
-
+int unsigned temperature=0;
 extern char TenSensorflag;
-unsigned int temperature=0;
-float tmp = 0;
-
+float tmp=0;
 int main(void)
-  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+{
 	//uint16_t RxData='a';
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 	LED_Init();
 	Delay_Init();
 	USART1_Init(115200);
@@ -29,16 +28,19 @@ int main(void)
 	Digital_Init();
 	DS18B20_GPIO_Config();
 	WIFI_Init();
+	
+	
 	while(1)
-	{ 
-		Delay_ms(2000);
-		if(TenSensorflag==1){
-			temperature=DS18B20_Temper(); 
+	{
+		if(TenSensorflag==1)
+		{
+			temperature = DS18B20_Temper();
 			tmp=temperature*0.1;
 			Client_Pub(tmp);
-			TenSensorflag = 0;
+			TenSensorflag=0;
 		}
-		wait_SUB();
+	 wait_SUB();
 	}
+	
 }
 

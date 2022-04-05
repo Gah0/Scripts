@@ -8,8 +8,8 @@
 //	}
 //	
 //}
-uint8_t D_us=0;//微妙系数
-uint16_t D_ms=0;//毫秒系数
+uint8_t D_us=0;
+uint16_t D_ms=0;
 void Delay_Init(void)
 {
 	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
@@ -29,7 +29,7 @@ void Delay_us(uint32_t nus)
 	
 	do{temp = SysTick->CTRL;}
 	while(!(temp&(1<<16)));
-	SysTick->CTRL = 0x00;						//关闭SysTick定时器
+	SysTick->CTRL = 0x00;					
 	SysTick->VAL=0x00;	
 		
 }
