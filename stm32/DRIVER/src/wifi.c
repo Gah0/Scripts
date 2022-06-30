@@ -119,7 +119,10 @@ void Client_Pub(float temp)
 
 void wait_OK(void)
 {
-	while(!Flag_usart3_receive_OK);
+	Delay_ms(3000);
+	int res = Flag_usart3_receive_OK;
+	while(!res);
+	printf("[wait_OK]res = %d\r\n",res);
 	Flag_usart3_receive_OK = 0;
 	CLR_Buf3();    
 }
