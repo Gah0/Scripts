@@ -123,7 +123,6 @@ void wait_OK(void)
 let:
 	res = Flag_usart3_receive_OK;
 	if(res!=0){
-		while(!res);
 		printf("[wait_OK]res=%d\r\n",res);
 		Flag_usart3_receive_OK = 0;
 		CLR_Buf3(); 
