@@ -1,0 +1,49 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "C/C++: gcc 生成活动文件",
+			"command": "/home/gah0/gcc/arm-linux-musleabi-cross/bin/arm-linux-musleabi-gcc",
+//			"command": "/home/gah0/gcc/arm-buildroot-linux-musleabi_sdk-buildroot/bin/arm-buildroot-linux-musleabi-gcc",
+//			"command": "/usr/bin/musl-gcc",
+			"args": [
+				"-fdiagnostics-color=always",
+				"-g",
+				"${file}",
+				"./cJSON.c",
+				"./modbusmaster.c",
+				"./timer.c",
+//				"-I/home/gah0/lichee/include/modbus",
+				"-I/home/gah0/mqtt/",
+				"-I/home/gah0/mqtt/include",
+				"-I/home/gah0/libmodbus-3.1.10/include/modbus",
+				"-o",
+				"${fileDirname}/${fileBasenameNoExtension}",
+//				"`pkg-config --cflags --libs libmodbus`"
+				"-L/home/gah0/mqtt/lib",
+                "-L/home/gah0/libmodbus-3.1.10/lib",
+//				"-fno-stack-protector",
+//				"-w",
+				"-lpaho-mqtt3a",
+				"-lpaho-mqtt3as",
+				"-lpaho-mqtt3c",
+				"-lpaho-mqtt3cs",
+				"-lmodbus",
+				"-lpthread",
+				"-lm"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "编译器: ~/arm-linux-musleabi-cross/bin/arm-linux-musleabi-gcc"
+		}
+	]
+}

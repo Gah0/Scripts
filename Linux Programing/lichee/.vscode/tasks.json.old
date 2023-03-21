@@ -1,0 +1,31 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "C/C++: gcc 生成活动文件",
+			"command": "~/arm-linux-musleabi-cross/bin/arm-linux-musleabi-gcc",
+			"args": [
+				"-fdiagnostics-color=always",
+				"-g",
+				"${file}",
+				"-I/home/gah0/lichee/include/modbus",
+				"-o",
+				"${fileDirname}/${fileBasenameNoExtension}",
+				"-L/home/gah0/lichee/lib",
+				"-lmodbus"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "编译器: ~/arm-linux-musleabi-cross/bin/arm-linux-musleabi-gcc"
+		}
+	]
+}

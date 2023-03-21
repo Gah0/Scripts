@@ -1,0 +1,6 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory '/home/gah0/桌面/Scripts'
+make: Leaving directory '/home/gah0/桌面/Scripts'
+ 
+make: *** No targets specified and no makefile found.  Stop.
+
