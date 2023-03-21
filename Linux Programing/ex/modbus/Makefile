@@ -1,4 +1,4 @@
-CC = gcc
+CC = ~/arm-linux-musleabi-cross/bin/arm-linux-musleabi-gcc
 INCDIR = `pkg-config libmodbus --cflags`
 CFLAGS = -O2 -Wall
 #CFLAGS = -g -O2 -Wall $(INCDIR)

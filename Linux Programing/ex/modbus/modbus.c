@@ -8,11 +8,8 @@ int main(){
 	int i,regs =0;
 	modbus_t *ctx = NULL;
 
-
-
-
 	ctx = modbus_new_rtu("/dev/ttyS7",9600,'N',8,1);
-	modbus_set_slave(ctx,1);	
+	modbus_set_slave(ctx,1);
 	modbus_rtu_set_serial_mode(ctx,MODBUS_RTU_RS485);
 	modbus_rtu_set_rts(ctx,MODBUS_RTU_RTS_UP);
 
@@ -40,6 +37,6 @@ int main(){
 		printf("\n");
 		sleep(1);
 	}
-	
+
 	return 0;
 }
