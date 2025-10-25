@@ -122,3 +122,33 @@ for i in $(ls -l |grep "device");
         dtc -I dtb -O dts -o ${i}.dts ${i}
     done
 }
+
+dl_toolchain(){
+		a_ARCH=$(uname -m)
+		
+		gcc_html_path="https://releases.linaro.org/components/toolchain/binaries/5.4-2017.05/aarch64-linux-gnu/"
+		gcc_filename_prefix="gcc-linaro-5.4.1-2017.05-x86_64_aarch64-linux-gnu"
+		gcc_banner="aarch64-linux-gnu-gcc (Linaro GCC 5.4-2017.05) 5.4.1"
+		gcc_copyright="2015"
+		datestamp="2017.05-gcc-aarch64-linux-gnu"
+		
+		binary="bin/aarch64-linux-gnu-"
+		
+		WGET="wget -c --directory-prefix=${BUILD_DIR}/"
+		if [ ! -f "${gcc_dir}/${gcc_filename_prefix}/${datestamp}" ] ; then
+			echo "Installing Toolchain: gcc_linaro_aarch64_gnu_5"
+			echo "-----------------------------"
+			${WGET} "${gcc_html_path}${gcc_filename_prefix}.tar.xz"
+			tar -xf "${gcc_filename_prefix}.tar.xz" -C "${BUILD_DIR}/"
+			#if [ -f "${BUILD_DIR}/${gcc_filename_prefix}/${binary}gcc" ] ; then
+			#	touch "${gcc_dir}/${gcc_filename_prefix}/${datestamp}"
+			#fi
+		else
+			echo "Using Existing Toolchain: gcc_linaro_aarch64_gnu_5"
+		fi
+			
+		#
+		#https://releases.linaro.org/components/toolchain/binaries/5.4-2017.05/aarch64-linux-gnu/gcc-linaro-5.4.1-2017.05-x86_64_aarch64-linux-gnu.tar.xz
+		#https://releases.linaro.org/components/toolchain/binaries/5.5-2017.10/aarch64-linux-gnu/gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu.tar.xz
+		#
+}
